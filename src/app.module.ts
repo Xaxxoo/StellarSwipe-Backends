@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
+// import { CacheModule } from '@nestjs/cache-manager';
 import { stellarConfig } from './config/stellar.config';
 import { databaseConfig, redisConfig } from './config/database.config';
 import { xaiConfig } from './config/xai.config';
@@ -15,7 +16,9 @@ import { TradesModule } from './trades/trades.module';
 import { RiskManagerModule } from './risk/risk-manager.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { SignalsModule } from './signals/signals.module';
+import { AiValidationModule } from './ai-validation/ai-validation.module';
 import { UsersModule } from './users/users.module';
+import { AssetsModule } from './assets/assets.module';
 import { configSchema } from './config/schemas/config.schema';
 import configuration from './config/configuration';
 import { HealthModule } from './health/health.module';
@@ -49,6 +52,19 @@ import { SorobanModule } from './soroban/soroban.module';
         allowUnknown: true,
         abortEarly: false,
       },
+    }),
+    // Cache Module - Redis-based caching
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        isGlobal: true,
+        host: configService.get<string>('redis.host') ?? 'localhost',
+        port: configService.get<number>('redis.port') ?? 6379,
+        password: configService.get<string>('redis.password'),
+        db: configService.get<number>('redis.db') ?? 0,
+        ttl: 60 * 1000, // 60 seconds default TTL
+      }),
     }),
     // Bull Module for async processing
     BullModule.forRootAsync({
@@ -89,10 +105,13 @@ import { SorobanModule } from './soroban/soroban.module';
     // Feature Modules
     UsersModule,
     SignalsModule,
+    AssetsModule,
     BetaModule,
     TradesModule,
     RiskManagerModule,
     PortfolioModule,
+    AiValidationModule,
+    HealthModule,
     HealthModule,
     // Cache Module - Redis-based caching for sessions and data
     CacheModule,
@@ -101,4 +120,4 @@ import { SorobanModule } from './soroban/soroban.module';
   providers: [StellarConfigService],
   exports: [StellarConfigService],
 })
-export class AppModule { }
+export class AppModule {}
