@@ -1,3 +1,22 @@
+ feat/ai-signal-validation-integration
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { BullModule } from "@nestjs/bull";
+import { Signal } from "./entities/signal.entity";
+import { SignalsService } from "./signals.service";
+import { SignalsController } from "./signals.controller";
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([Signal]),
+    BullModule.registerQueue({
+      name: "signal-validation",
+    }),
+  ],
+  providers: [SignalsService],
+  controllers: [SignalsController],
+  exports: [SignalsService, TypeOrmModule],
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
  feat/signal-autoclose
@@ -117,6 +136,7 @@ import { SignalInteraction } from './entities/signal-interaction.entity';
   controllers: [SignalsController],
   providers: [SignalsService],
   exports: [SignalsService],
+ main
  main
  main
 })

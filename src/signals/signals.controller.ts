@@ -1,3 +1,11 @@
+ feat/ai-signal-validation-integration
+import { Controller, Post, Body, Get, Param, NotFoundException } from "@nestjs/common";
+import { SignalsService } from "./signals.service";
+import { CreateSignalDto } from "./dto/create-signal.dto";
+import { Signal } from "./entities/signal.entity";
+
+@Controller("signals")
+
 import {
   Controller,
   Get,
@@ -184,15 +192,33 @@ import { CreateSignalDto } from './dto/signals.dto';
 import { SignalStatus } from './entities/signal.entity';
 
 @Controller('signals')
+ main
 export class SignalsController {
   constructor(private readonly signalsService: SignalsService) {}
 
   @Post()
+ feat/ai-signal-validation-integration
+  async create(@Body() createSignalDto: CreateSignalDto): Promise<Signal> {
+
   create(@Body() createSignalDto: CreateSignalDto) {
+ main
     return this.signalsService.create(createSignalDto);
   }
 
   @Get()
+ feat/ai-signal-validation-integration
+  async findAll(): Promise<Signal[]> {
+    return this.signalsService.findAll();
+  }
+
+  @Get(":id")
+  async findOne(@Param("id") id: string): Promise<Signal> {
+    const signal = await this.signalsService.findOne(id);
+    if (!signal) {
+      throw new NotFoundException(`Signal with ID ${id} not found`);
+    }
+    return signal;
+
   findAll(@Query('status') status?: SignalStatus) {
     return this.signalsService.findAll(status);
   }
@@ -213,6 +239,7 @@ export class SignalsController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.signalsService.remove(id);
+ main
  main
   }
 }

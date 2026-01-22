@@ -1,9 +1,11 @@
+
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { stellarConfig } from './config/stellar.config';
 import { databaseConfig, redisConfig } from './config/database.config';
+import { xaiConfig } from './config/xai.config';
 import { appConfig, sentryConfig } from './config/app.config';
 import { jwtConfig } from './config/jwt.config';
 import { StellarConfigService } from './config/stellar.service';
@@ -13,6 +15,10 @@ import { BetaModule } from './beta/beta.module';
 import { TradesModule } from './trades/trades.module';
 import { RiskManagerModule } from './risk/risk-manager.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
+ feat/ai-signal-validation-integration
+import { SignalsModule } from './signals/signals.module';
+import { AiValidationModule } from './ai-validation/ai-validation.module';
+
  feat/signal-autoclose
  feat/signal-performance
 
@@ -20,6 +26,7 @@ import { UsersModule } from './users/users.module';
  main
  main
 import { SignalsModule } from './signals/signals.module';
+ main
 import { configSchema } from './config/schemas/config.schema';
 import configuration from './config/configuration';
 import { HealthModule } from './health/health.module';
@@ -36,6 +43,7 @@ import { HealthModule } from './health/health.module';
         databaseConfig,
         redisConfig,
         jwtConfig,
+        xaiConfig,
         configuration,
       ],
       envFilePath: [
@@ -48,6 +56,19 @@ import { HealthModule } from './health/health.module';
         allowUnknown: true,
         abortEarly: false,
       },
+    }),
+    // Bull Module for async processing
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        redis: {
+          host: configService.get("redis.host"),
+          port: configService.get("redis.port"),
+          password: configService.get("redis.password"),
+          db: configService.get("redis.db"),
+        },
+      }),
     }),
     // Logger Module - Winston-based structured logging
     LoggerModule,
@@ -108,6 +129,10 @@ import { HealthModule } from './health/health.module';
     TradesModule,
     RiskManagerModule,
     PortfolioModule,
+ feat/ai-signal-validation-integration
+    SignalsModule,
+    AiValidationModule,
+
  feat/signal-autoclose
     SignalsModule,
 
@@ -115,6 +140,7 @@ import { HealthModule } from './health/health.module';
     SignalsModule,
 
     HealthModule,
+ main
  main
  main
   ],
