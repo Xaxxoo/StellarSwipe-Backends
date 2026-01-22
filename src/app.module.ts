@@ -14,7 +14,7 @@ import { RiskManagerModule } from './risk/risk-manager.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { configSchema } from './config/schemas/config.schema';
 import configuration from './config/configuration';
-import { HealthController } from './health/health.controller';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -71,8 +71,8 @@ import { HealthController } from './health/health.controller';
     TradesModule,
     RiskManagerModule,
     PortfolioModule,
+    HealthModule,
   ],
-  controllers: [HealthController],
   providers: [StellarConfigService],
   exports: [StellarConfigService],
 })
