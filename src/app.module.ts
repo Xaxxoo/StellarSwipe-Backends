@@ -13,6 +13,7 @@ import { LoggerModule } from './common/logger';
 import { SentryModule } from './common/sentry';
 import { BetaModule } from './beta/beta.module';
 import { TradesModule } from './trades/trades.module';
+import { RiskManagerModule } from './risk/risk-manager.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
 import { SignalsModule } from './signals/signals.module';
 import { AiValidationModule } from './ai-validation/ai-validation.module';
@@ -85,6 +86,7 @@ import { HealthController } from './health/health.controller';
     // Feature Modules
     BetaModule,
     TradesModule,
+    RiskManagerModule,
     PortfolioModule,
     SignalsModule,
     AiValidationModule,

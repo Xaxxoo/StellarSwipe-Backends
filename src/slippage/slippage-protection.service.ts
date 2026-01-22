@@ -114,7 +114,7 @@ export class SlippageProtectionService {
       }
 
       return result;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Error validating trade execution for ${context.symbol}`,
         error instanceof Error ? error.stack : String(error),
@@ -257,11 +257,13 @@ export class SlippageProtectionService {
     }
 
     if (filters?.startDate) {
-      reports = reports.filter(r => r.timestamp >= filters.startDate!);
+      const startDate = filters.startDate;
+      reports = reports.filter(r => r.timestamp >= startDate);
     }
-
+    
     if (filters?.endDate) {
-      reports = reports.filter(r => r.timestamp <= filters.endDate!);
+      const endDate = filters.endDate;
+      reports = reports.filter(r => r.timestamp <= endDate);
     }
 
     if (filters?.onlyExceeded) {

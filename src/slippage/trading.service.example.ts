@@ -131,7 +131,7 @@ export class TradingService {
         actualSlippage: slippageReport.slippagePercent,
       };
 
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Error executing trade for ${params.symbol}`,
         error instanceof Error ? error.stack : String(error),
