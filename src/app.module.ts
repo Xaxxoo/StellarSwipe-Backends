@@ -13,9 +13,11 @@ import { BetaModule } from './beta/beta.module';
 import { TradesModule } from './trades/trades.module';
 import { RiskManagerModule } from './risk/risk-manager.module';
 import { PortfolioModule } from './portfolio/portfolio.module';
+ feat/signal-autoclose
  feat/signal-performance
 
 import { UsersModule } from './users/users.module';
+ main
  main
 import { SignalsModule } from './signals/signals.module';
 import { configSchema } from './config/schemas/config.schema';
@@ -68,20 +70,34 @@ import { HealthModule } from './health/health.module';
         migrations: ['dist/migrations/*{.ts,.js}'],
         subscribers: ['dist/subscribers/*{.ts,.js}'],
         ssl: configService.get<boolean>('database.ssl') ?? false,
+ feat/signal-autoclose
+      }),
+    }),
+    // Bull Queue Module
+
  feat/signal-performance
       }),
     }),
     // Bull Queue Module for background jobs
+ main
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         redis: {
+          feat/signal-autoclose
+          host: configService.get<string>('redis.host') ?? 'localhost',
+          port: configService.get<number>('redis.port') ?? 6379,
+          password: configService.get<string>('redis.password'),
+          db: configService.get<number>('redis.db') ?? 0,
+        },
+
           host: configService.get<string>('redis.host'),
           port: configService.get<number>('redis.port'),
           password: configService.get<string>('redis.password'),
           db: configService.get<number>('redis.db'),
         },
+ main
  main
       }),
     }),
@@ -92,10 +108,14 @@ import { HealthModule } from './health/health.module';
     TradesModule,
     RiskManagerModule,
     PortfolioModule,
+ feat/signal-autoclose
+    SignalsModule,
+
  feat/signal-performance
     SignalsModule,
 
     HealthModule,
+ main
  main
   ],
   providers: [StellarConfigService],

@@ -1,3 +1,6 @@
+ feat/signal-autoclose
+export * from './expiration.dto';
+
 import {
   IsString,
   IsEnum,
@@ -207,3 +210,4 @@ export class SignalStatsDto {
   totalVolume!: string;
   topPerformingAssets!: { asset: string; avgPnl: string }[];
 }
+ main
