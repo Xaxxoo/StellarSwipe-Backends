@@ -31,6 +31,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { AuthModule } from './auth/auth.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { WebsocketModule } from './websocket/websocket.module';
+import { I18nModule as LocalI18nModule } from './i18n/i18n.module';
+import { I18nMiddleware } from './i18n/i18n.middleware';
 
 @Module({
   imports: [
@@ -113,8 +115,13 @@ import { WebsocketModule } from './websocket/websocket.module';
     CacheModule,
     AuthModule,
     WebsocketModule,
+    LocalI18nModule,
   ],
   providers: [StellarConfigService],
   exports: [StellarConfigService],
 })
-export class AppModule { }
+export class AppModule {
+  configure(consumer: import('@nestjs/common').MiddlewareConsumer) {
+    consumer.apply(I18nMiddleware).forRoutes('*');
+  }
+}
