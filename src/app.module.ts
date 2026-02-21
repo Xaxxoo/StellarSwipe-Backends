@@ -40,6 +40,7 @@ import { I18nMiddleware } from './i18n/i18n.middleware';
 import { MentorshipModule } from './mentorship/mentorship.module';
 import { ProvidersModule } from './providers/providers.module';
 import { MlModule } from './ml/ml.module';
+import { ValidationModule } from './common/validation/validation.module';
 
 
 @Module({

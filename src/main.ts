@@ -11,6 +11,7 @@ import {
 } from './common/interceptors';
 import { LoggerService } from './common/logger';
 import { SentryService } from './common/sentry';
+import { SanitizationPipe } from './common/pipes';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -49,6 +50,7 @@ async function bootstrap() {
 
   // Global pipes
   app.useGlobalPipes(
+    new SanitizationPipe(),
     new I18nValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
