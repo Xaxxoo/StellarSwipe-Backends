@@ -4,6 +4,8 @@ import { Trade } from './entities/trade.entity';
 import { AdvancedOrder } from './entities/advanced-order.entity';
 import { TradesController } from './trades.controller';
 import { AdvancedOrdersController } from './advanced-orders.controller';
+import { LimitOrderController } from './limit-order.controller';
+import { LimitOrderService } from './limit-order.service';
 import { TradesService } from './trades.service';
 import { RiskManagerService } from './services/risk-manager.service';
 import { TradeExecutorService } from './services/trade-executor.service';
@@ -12,6 +14,9 @@ import { IcebergOrderService } from './services/iceberg-order.service';
 import { StellarConfigService } from '../config/stellar.service';
 import { RiskManagerModule } from '../risk/risk-manager.module';
 import { ComplianceModule } from '../compliance/compliance.module';
+import { SdexModule } from '../sdex/sdex.module';
+import { SorobanModule } from '../soroban/soroban.module';
+import { Signal } from '../signals/entities/signal.entity';
 import { BullModule } from '@nestjs/bull';
 import { WebsocketModule } from '../websocket/websocket.module';
 import { TxMonitorService } from './services/tx-monitor.service';
@@ -27,9 +32,11 @@ import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Trade, AdvancedOrder]),
+    TypeOrmModule.forFeature([Trade, AdvancedOrder, Signal]),
     RiskManagerModule,
     ComplianceModule,
+    SdexModule,
+    SorobanModule,
     BullModule.registerQueue({
       name: 'transactions',
     }),
@@ -37,7 +44,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
     AuditModule,
     NotificationsModule,
   ],
-  controllers: [TradesController, AdvancedOrdersController, TradeAuditController],
+  controllers: [TradesController, AdvancedOrdersController, LimitOrderController],
   providers: [
     TradesService,
     RiskManagerService,
@@ -50,8 +57,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
     PartialCloseService,
     TradeHistoryService,
     TradeOutcomeService,
-    TradeAuditService,
-    ConfirmationPollingService,
+    LimitOrderService,
   ],
   exports: [TradesService, RiskManagerService, OcoOrderService, IcebergOrderService, PartialCloseService, TradeHistoryService, TradeOutcomeService, TradeAuditService, ConfirmationPollingService],
 })
