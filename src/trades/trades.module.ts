@@ -16,6 +16,8 @@ import { RiskManagerModule } from '../risk/risk-manager.module';
 import { ComplianceModule } from '../compliance/compliance.module';
 import { SdexModule } from '../sdex/sdex.module';
 import { SorobanModule } from '../soroban/soroban.module';
+import { APP_FILTER } from '@nestjs/core';
+import { SorobanExceptionFilter } from '../common/filters/soroban-exception.filter';
 import { Signal } from '../signals/entities/signal.entity';
 import { BullModule } from '@nestjs/bull';
 import { WebsocketModule } from '../websocket/websocket.module';
@@ -76,6 +78,7 @@ import { TradeSagaEntity } from './saga/trade-saga.entity';
     TradeSagaOrchestrator,
     TradeSagaStepsFactory,
     TradeSagaService,
+    { provide: APP_FILTER, useClass: SorobanExceptionFilter },
   ],
   exports: [TradesService, RiskManagerService, OcoOrderService, IcebergOrderService, PartialCloseService, TradeHistoryService, TradeOutcomeService, TradeAuditService, ConfirmationPollingService, TradeExecutionOrchestratorService, TradeRetryService, TradeExecutorService, TradeSagaService],
 })
